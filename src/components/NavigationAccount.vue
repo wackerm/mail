@@ -130,7 +130,11 @@ export default {
 		deleteAccount() {
 			const id = this.account.id
 			OC.dialogs.confirmDestructive(
-				t('mail', "The {accountId}'s account and cached email data will be removed from Nextcloud, but not from your email provider.", {accountId: this.account}),
+				t(
+					'mail',
+					"The {accountId}'s account and cached email data will be removed from Nextcloud, but not from your email provider.",
+					{accountId: this.account}
+				),
 				t('mail', 'Remove account'),
 				{
 					type: OC.dialogs.YES_NO_BUTTONS,
@@ -138,7 +142,7 @@ export default {
 					confirmClasses: 'error',
 					cancel: t('mail', 'Cancel'),
 				},
-				result => {
+				(result) => {
 					if (result) {
 						this.loading.delete = true
 						return this.$store
@@ -152,7 +156,7 @@ export default {
 								// TODO: update store and handle this more efficiently
 								location.href = generateUrl('/apps/mail')
 							})
-							.catch(error => logger.error('could not delete account', {error}))
+							.catch((error) => logger.error('could not delete account', {error}))
 					}
 				}
 			)
