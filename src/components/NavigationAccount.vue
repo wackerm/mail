@@ -133,7 +133,7 @@ export default {
 			OC.dialogs.confirmDestructive(
 				t(
 					'mail',
-					"The account for {email} and cached email data will be removed from Nextcloud, but not from your email provider.",
+					'The account for {email} and cached email data will be removed from Nextcloud, but not from your email provider.',
 					{email: this.account.emailAddress}
 				),
 				t('mail', 'Remove account {email}', {email: this.account.emailAddress}),
