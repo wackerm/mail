@@ -148,7 +148,7 @@ export default {
 						return this.$store
 							.dispatch('deleteAccount', this.account)
 							.then(() => {
-								this.loading.delete = false
+								this.loading = true
 							})
 							.then(() => {
 								logger.info(`account ${id} deleted, redirecting …`)
@@ -158,7 +158,7 @@ export default {
 							})
 							.catch((error) => logger.error('could not delete account', {error}))
 					}
-					this.loading.delete = true
+					this.loading = false
 				}
 			)
 		},
