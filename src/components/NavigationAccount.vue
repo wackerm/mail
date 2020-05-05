@@ -90,6 +90,9 @@ export default {
 	data() {
 		return {
 			menuOpen: false,
+			loading: {
+				delete: false,
+			},
 		}
 	},
 	computed: {
@@ -148,7 +151,7 @@ export default {
 						return this.$store
 							.dispatch('deleteAccount', this.account)
 							.then(() => {
-								this.loading = true
+								this.loading.delete = true
 							})
 							.then(() => {
 								logger.info(`account ${id} deleted, redirecting …`)
@@ -158,7 +161,7 @@ export default {
 							})
 							.catch((error) => logger.error('could not delete account', {error}))
 					}
-					this.loading = false
+					this.loading.delete = false
 				}
 			)
 		},
