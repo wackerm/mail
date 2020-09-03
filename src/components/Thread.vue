@@ -76,23 +76,7 @@
 			<ThreadMessage v-for="threadMessage in previousThread"
 				:key="threadMessage.databaseId"
 				:message="threadMessage" />
-			<div :class="[message.hasHtmlBody ? 'mail-message-body mail-message-body-html' : 'mail-message-body']">
-				<div v-if="message.itineraries.length > 0" class="message-itinerary">
-					<Itinerary :entries="message.itineraries" :message-id="message.messageId" />
-				</div>
-				<MessageHTMLBody v-if="message.hasHtmlBody" :url="htmlUrl" />
-				<MessageEncryptedBody v-else-if="isEncrypted" :body="message.body" :from="from" />
-				<MessagePlainTextBody v-else :body="message.body" :signature="message.signature" />
-				<Popover v-if="message.attachments[0]" class="attachment-popover">
-					<Actions slot="trigger">
-						<ActionButton icon="icon-public icon-attachment">
-							Attachments
-						</ActionButton>
-					</Actions>
-					<MessageAttachments :attachments="message.attachments" />
-				</Popover>
-				<div id="reply-composer" />
-			</div>
+			<Message :envelope="envelope" :message="message" />
 			<ThreadMessage v-for="threadMessage in successiveThread"
 				:key="threadMessage.databaseId"
 				:message="threadMessage" />
@@ -116,15 +100,9 @@ import {
 } from '../ReplyBuilder'
 import Error from './Error'
 import { getRandomMessageErrorMessage } from '../util/ErrorMessageFactory'
-import { html, plain } from '../util/text'
-import { isPgpgMessage } from '../crypto/pgp'
-import Itinerary from './Itinerary'
-import MessageEncryptedBody from './MessageEncryptedBody'
-import MessageHTMLBody from './MessageHTMLBody'
-import MessagePlainTextBody from './MessagePlainTextBody'
 import Loading from './Loading'
 import logger from '../logger'
-import MessageAttachments from './MessageAttachments'
+import Message from './Message'
 import ThreadMessage from './ThreadMessage'
 
 export default {
@@ -135,12 +113,8 @@ export default {
 		AddressList,
 		AppContentDetails,
 		Error,
-		Itinerary,
 		Loading,
-		MessageAttachments,
-		MessageEncryptedBody,
-		MessageHTMLBody,
-		MessagePlainTextBody,
+		Message,
 		Modal,
 		Popover,
 		ThreadMessage,
@@ -160,17 +134,6 @@ export default {
 		}
 	},
 	computed: {
-		from() {
-			return this.message.from.length === 0 ? '?' : this.message.from[0].label || this.message.from[0].email
-		},
-		isEncrypted() {
-			return isPgpgMessage(this.message.hasHtmlBody ? html(this.message.body) : plain(this.message.body))
-		},
-		htmlUrl() {
-			return generateUrl('/apps/mail/api/messages/{id}/html', {
-				id: this.envelope.databaseId,
-			})
-		},
 		hasMultipleRecipients() {
 			return this.replyRecipient.to.concat(this.replyRecipient.cc).length > 1
 		},
